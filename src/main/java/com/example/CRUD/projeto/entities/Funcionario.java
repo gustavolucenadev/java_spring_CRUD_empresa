@@ -2,6 +2,10 @@ package com.example.CRUD.projeto.entities;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+
 @Entity
 @Table(name = "tb_funcionario")
 public class Funcionario {
@@ -12,6 +16,14 @@ public class Funcionario {
     private String cpf;
     private String cargo;
     private Double salario;
+
+    @ManyToOne
+    @JoinColumn(name = "id_departamento")
+    private Departamento departamento;
+
+    @ManyToMany
+    @JoinTable(name="tb_funcionario_projeto", joinColumns = @JoinColumn(name = "id_funcionario"), inverseJoinColumns = @JoinColumn(name = "id_projeto"))
+    private Set<Projeto> projetos = new HashSet<>();
 
     public Funcionario() {
     }
@@ -62,5 +74,27 @@ public class Funcionario {
 
     public void setSalario(Double salario) {
         this.salario = salario;
+    }
+
+    public Departamento getDepartamento() {
+        return departamento;
+    }
+
+    public Set<Projeto> getProjetos() {
+        return projetos;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Funcionario that = (Funcionario) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

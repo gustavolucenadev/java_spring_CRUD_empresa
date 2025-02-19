@@ -2,6 +2,10 @@ package com.example.CRUD.projeto.entities;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+
 @Entity
 @Table(name = "tb_projeto")
 public class Projeto {
@@ -9,6 +13,9 @@ public class Projeto {
     private Long id;
     private String nome;
     private Double preco;
+
+    @ManyToMany(mappedBy = "projetos")
+    private Set<Funcionario> funcionarios = new HashSet<>();
 
     public Projeto(Long id, String nome, Double preco) {
         this.id = id;
@@ -38,5 +45,23 @@ public class Projeto {
 
     public void setPreco(Double preco) {
         this.preco = preco;
+    }
+
+    public Set<Funcionario> getFuncionarios() {
+        return funcionarios;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Projeto projeto = (Projeto) o;
+        return Objects.equals(id, projeto.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }
